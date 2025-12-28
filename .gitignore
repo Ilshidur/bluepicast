@@ -1,0 +1,25 @@
+# Binaries
+bluetooth-web-ui
+bluetooth-web-ui-*
+*.exe
+
+# Go build artifacts
+/vendor/
+go.work
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Air hot reload
+tmp/
+/bluepicast-*
