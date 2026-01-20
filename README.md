@@ -34,7 +34,7 @@ Install on your existing Raspberry Pi OS with a single command:
 curl -sSL https://raw.githubusercontent.com/Ilshidur/bluepicast/main/install.sh | sudo bash
 ```
 
-Access the web interface at `http://<raspberry-pi-ip>:8080`
+Access the web interface at `https://<raspberry-pi-ip>:8443`
 
 ## Uninstall script
 

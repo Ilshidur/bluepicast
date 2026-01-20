@@ -63,6 +63,8 @@ sudo $(go env GOPATH)/bin/air
 
 # Or direct run
 sudo go run ./cmd/server --port 8080 --enable-systemd-snapclient
+# Or with HTTPS
+sudo go run ./cmd/server --port 8443 --enable-systemd-snapclient --https
 ```
 
 ### Cross-Compilation for Raspberry Pi

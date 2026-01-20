@@ -621,7 +621,7 @@ Requires=bluetooth.target bluealsa.service
 
 [Service]
 Type=simple
-ExecStart=/usr/local/bin/bluepicast --port 8080 --enable-systemd-snapclient
+ExecStart=/usr/local/bin/bluepicast --port 8443 --enable-systemd-snapclient --https
 Restart=on-failure
 RestartSec=5
 User=root
@@ -755,7 +755,7 @@ systemctl is-active bluepicast.service &>/dev/null && echo -e "  - BluePiCast: $
 echo -e "  - Snapclient: ${YELLOW}configure via web UI, then enable${NC}"
 echo
 echo -e "Access the web interface at:"
-echo -e "  ${YELLOW}http://<your-raspberry-pi-ip>:8080${NC}"
+echo -e "  ${YELLOW}https://<your-raspberry-pi-ip>:8443${NC}"
 echo
 echo -e "${YELLOW}Next steps:${NC}"
 echo -e "  1. Open the web interface"
