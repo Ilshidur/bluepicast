@@ -26,7 +26,8 @@ fi
 echo -e "${YELLOW}This will remove BluePiCast, BlueALSA, and Snapclient services and configurations.${NC}"
 echo -e "${YELLOW}Bluetooth and ALSA base packages will NOT be removed.${NC}"
 echo
-read -p "Are you sure you want to uninstall? (y/N) " -n 1 -r
+# Read from /dev/tty to handle piped execution (curl | bash)
+read -p "Are you sure you want to uninstall? (y/N) " -n 1 -r < /dev/tty
 echo
 if [[ ! $REPLY =~ ^[Yy]$ ]]; then
     echo "Uninstall cancelled."
