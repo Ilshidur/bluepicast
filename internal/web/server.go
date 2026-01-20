@@ -2,6 +2,7 @@ package web
 
 import (
 	"context"
+	"crypto/tls"
 	"embed"
 	"encoding/json"
 	"fmt"
@@ -126,12 +127,13 @@ type Server struct {
 	clients         map[*client]bool
 	clientsMu       sync.RWMutex
 	port            int
+	tlsConfig       *tls.Config
 	alsaAutoRoute   bool
 	alsaAutoRouteMu sync.RWMutex
 }
 
 // NewServer creates a new web server
-func NewServer(adapter *bluetooth.Adapter, audioMgr *audio.Manager, snapclientMgr *snapcast.Manager, port int) *Server {
+func NewServer(adapter *bluetooth.Adapter, audioMgr *audio.Manager, snapclientMgr *snapcast.Manager, port int, tlsConfig *tls.Config) *Server {
 	s := &Server{
 		adapter:       adapter,
 		audioMgr:      audioMgr,
@@ -153,8 +155,9 @@ func NewServer(adapter *bluetooth.Adapter, audioMgr *audio.Manager, snapclientMg
 				return true // For local network devices, allow all origins
 			},
 		},
-		clients: make(map[*client]bool),
-		port:    port,
+		clients:   make(map[*client]bool),
+		port:      port,
+		tlsConfig: tlsConfig,
 	}
 
 	// Set up callback for device changes
@@ -184,8 +187,9 @@ func (s *Server) Start(ctx context.Context) error {
 	})
 
 	server := &http.Server{
-		Addr:    fmt.Sprintf(":%d", s.port),
-		Handler: mux,
+		Addr:      fmt.Sprintf(":%d", s.port),
+		Handler:   mux,
+		TLSConfig: s.tlsConfig,
 	}
 
 	go func() {
@@ -194,6 +198,11 @@ func (s *Server) Start(ctx context.Context) error {
 		defer cancel()
 		server.Shutdown(shutdownCtx)
 	}()
+
+	if s.tlsConfig != nil {
+		log.Printf("Starting server on https://0.0.0.0:%d", s.port)
+		return server.ListenAndServeTLS("", "")
+	}
 
 	log.Printf("Starting server on http://0.0.0.0:%d", s.port)
 	return server.ListenAndServe()
